@@ -1,6 +1,5 @@
 from database.coneccao import criar_conexao
 
-
 class ProdutoRepositorio:
     def cadastrar(self, produto):
         conexao = criar_conexao()
@@ -69,7 +68,8 @@ class ProdutoRepositorio:
             cursor.close()
             conexao.close()
 
-    def excluir(self, produto_id):
+    def excluir_por_id(self, produto_id):
+
         conexao = criar_conexao()
         cursor = conexao.cursor()
         try:
@@ -85,6 +85,54 @@ class ProdutoRepositorio:
 
             conexao.commit()
             return quantidade > 0
+        finally:
+            cursor.close()
+            conexao.close()
+
+    def excluir_por_nome(self,nome):
+        conexao = criar_conexao()
+        cursor = conexao.cursor()
+
+        try:
+            sql = """DELETE FROM produto WHERE nome = %s"""
+
+            valores = (nome,)
+
+            cursor.execute(sql, valores)
+
+            quantidade = cursor.rowcount
+            conexao.commit()
+            return  quantidade
+
+        finally:
+            cursor.close()
+            conexao.close()
+
+    def buscar_id(self, produto_id):
+        try:
+            conexao = criar_conexao()
+            cursor = conexao.cursor()
+
+            sql = """SELECT  * FROM supermercado.produto WHERE id = %s"""
+
+            cursor.execute(sql, (produto_id,))
+            produtos = cursor.fetchone()
+            return produtos
+        finally:
+            cursor.close()
+            conexao.close()
+
+    def buscar_por_nome(self, nome):
+        try:
+            conexao = criar_conexao()
+            cursor = conexao.cursor()
+
+            sql = " SELECT * FROM supermercado.produto WHERE nome = %s"
+
+            cursor.execute(sql, (nome,))
+            produtos = cursor.fetchall()
+            return produtos
+
         finally:
             cursor.close()
             conexao.close()

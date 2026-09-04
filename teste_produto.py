@@ -1,11 +1,9 @@
+from servicos.produto_servico import ProdutoServico
 from repositorios.produtos_repositorios import ProdutoRepositorio
 from models.produto import Produto
 
-repositorio = ProdutoRepositorio()
+novo_prod = Produto('Alimento', 'Macarrão 500g', 25.15 ,150)
 
-produto_atualizado = Produto("Limpeza","Detergente 500ml", 3.00,100)
+servicos = ProdutoServico()
 
-if repositorio.excluir(7):
-    print("Item excluido com sucesso!!")
-else:
-    print("Produto não encontrado!")
+servicos.atualizar(11,novo_prod)

@@ -29,10 +29,11 @@ class ProdutoRepositorio:
             conexao.close()
 
     def listar_todos(self):
-        conexao = criar_conexao()
-        cursor = conexao.cursor()
-
         try:
+            conexao = criar_conexao()
+            cursor = conexao.cursor()
+
+
 
             sql = "SELECT ID,  categoria, nome, preco, qtd_estoque FROM produto"
 

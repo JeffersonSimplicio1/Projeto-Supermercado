@@ -19,10 +19,29 @@ class ProdutoServico:
     def listar_todos(self):
         produtos =self.repositorio.listar_todos()
         if len(produtos) >0:
-            for produto in produtos:
-                msg = produto
+                msg = produtos
         else:
             msg ='Não há itens no estoque!'
+        return msg
+
+    def buscar_por_id(self,produto_id):
+        produto = self.repositorio.buscar_id(produto_id)
+        if not produto:
+            msg = "Produto inexistente"
+        else:
+            msg = f'Produto: {produto}'
+        return msg
+
+    def buscar_por_nome(self, nome):
+        nome_tratado = nome.strip()
+        if nome_tratado:
+            busca = self.repositorio.buscar_por_nome(nome_tratado)
+            if not busca:
+                msg = f"Não há registros de produtos com o nome solicitado "
+            else:
+                msg = busca
+        else:
+            msg = "Insira um nome para iniciar a pesquisa!"
         return msg
 
     def atualizar(self, produto_id, produto):

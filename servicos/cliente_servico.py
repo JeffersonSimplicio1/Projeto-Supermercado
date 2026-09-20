@@ -8,32 +8,40 @@ class ClienteServico:
         if cliente.nome.strip() and cliente.cpf.strip():
             cadastrar_cliente =self.repositorio.cadastrar(cliente)
             if cadastrar_cliente:
-                return 'Cliente cadastrado com sucesso!'
+                msg = 'Cliente cadastrado com sucesso!'
             else:
-                return  "Cliente não cadastrado! (Resposta negativa do Banco de dados)"
+                msg =  "Cliente não cadastrado! (Resposta negativa do Banco de dados)"
         else:
-            return "Por Favor, insira um valor valido nos campos Nome e Cpf!"
+            msg = "Por Favor, insira um valor valido nos campos Nome e Cpf!"
+        return msg
 
     def listar_todos(self):
         lista_clientes = self.repositorio.listar_todos()
         if not lista_clientes:
-            return "Não existe clientes cadastrados!!"
+            msg = "Não existe clientes cadastrados!!"
         else:
-            return lista_clientes
+            msg = lista_clientes
+        return msg
 
     def buscar_por_id(self,cliente_id):
         identificacao = self.repositorio.buscar_por_id(cliente_id)
         if not identificacao:
-            return "ID inexistente!"
+            msg = "Cliente inexistente!"
         else:
-            return identificacao
+            msg = f"Cliente: {identificacao}"
+        return msg
 
     def buscar_por_nome(self, nome):
-        busca = self.repositorio.buscar_por_nome(nome)
-        if not busca:
-            return "Não foram encontrados registros com esse nome"
+        nome_tratado = nome.strip()
+        if nome_tratado:
+            busca = self.repositorio.buscar_por_nome(nome)
+            if not busca:
+                msg = "Não foram encontrados registros com esse nome"
+            else:
+                msg = busca
         else:
-           return busca
+            msg = "Insira um nome para iniciar a pesquisa!"
+        return msg
 
     def atualizar(self, cliente_id, cliente):
         buscar_cliente = self.repositorio.buscar_por_id(cliente_id)

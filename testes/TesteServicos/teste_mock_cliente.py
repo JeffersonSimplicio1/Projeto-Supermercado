@@ -86,3 +86,71 @@ class TestClienteServico(unittest.TestCase):
         self.mock_repositorio.buscar_por_nome.assert_not_called()
         self.assertEqual(resultado,"Insira um nome para iniciar a pesquisa!")
 
+    def test_atualizar_sucesso(self):
+        cliente = Cliente("Henry", "055.245.667-88",8155554444, "qqq@hotmail.com")
+        self.mock_repositorio.buscar_por_id.return_value = 1
+        self.mock_repositorio.atualizar.return_value = True
+        resultado = self.servico.atualizar(1,cliente)
+        self.mock_repositorio.buscar_por_id.assert_called_once_with(1)
+        self.mock_repositorio.atualizar.assert_called_once_with(1,cliente)
+        self.assertEqual(resultado, "Dados do cliente, Atualizado com SUCESSO!")
+
+    def test_atualizar_cliente_inexistente(self):
+        cliente = Cliente("Henry", "055.245.667-88", 8155554444, "qqq@hotmail.com")
+        self.mock_repositorio.buscar_por_id.return_value = False
+        resultado = self.servico.atualizar(1,cliente)
+        self.mock_repositorio.atualizar.assert_not_called()
+        self.assertEqual(resultado, "Id inexistente!")
+
+    def test_atualizar_erro_repositorio(self):
+        cliente = Cliente("Henry", "055.245.667-88", 8155554444, "qqq@hotmail.com")
+        self.mock_repositorio.buscar_por_id.return_value = 1
+        self.mock_repositorio.atualizar.return_value = False
+        resultado = self.servico.atualizar(1,cliente)
+        self.mock_repositorio.buscar_por_id.assert_called_once_with(1)
+        self.mock_repositorio.atualizar.assert_called_once_with(1,cliente)
+        self.assertEqual(resultado, "Os dados não foram atualizados!\n"
+                    "Erro interno!")
+
+    def test_excluir_por_id_sucesso(self):
+        self.mock_repositorio.buscar_por_id.return_value = 1
+        self.mock_repositorio.excluir_por_id.return_value = True
+        resultado = self.servico.excluir_por_id(1)
+        self.mock_repositorio.excluir_por_id.assert_called_once_with(1)
+        self.assertEqual(resultado, "Cliente excluido com Sucesso")
+
+    def test_excluir_por_id_inexistente(self):
+        self.mock_repositorio.buscar_por_id.return_value = []
+        self.mock_repositorio.excluir_por_id.return_value = False
+        resultado = self.servico.excluir_por_id(2)
+        self.mock_repositorio.excluir_por_id.assert_not_called()
+        self.assertEqual(resultado, 'O Id solicitado não foi encontrado!')
+
+    def test_excluir_por_id_erro_repositorio(self):
+        self.mock_repositorio.excluir_por_id.return_value = False
+        resultado = self.servico.excluir_por_id(1)
+        self.mock_repositorio.excluir_por_id.assert_called_once_with(1)
+        self.assertEqual(resultado, "Id não excluido!\n"
+                       "Erro Interno!")
+
+    def test_excluir_por_nome_sucesso(self):
+        cliente = "Jefferson"
+        self.mock_repositorio.buscar_por_nome.return_value = ["Nome1","Nome2","Nome3"]
+        self.mock_repositorio.excluir_por_nome.return_value = True
+        resultado = self.servico.excluir_por_nome(cliente)
+        self.mock_repositorio.excluir_por_nome.assert_called_once_with(cliente)
+        self.assertEqual(resultado,"Cliente(s) excluido(s)")
+
+    def test_excluir_por_nome_inexistente(self):
+        self.mock_repositorio.buscar_por_nome.return_value = []
+        self.mock_repositorio.excluir_por_nome.return_value = False
+        resultado = self.servico.excluir_por_nome("Nome")
+        self.mock_repositorio.excluir_por_nome.assert_not_called()
+        self.assertEqual(resultado,"Nenhum cliente encontrado")
+
+    def test_excluir_por_nome_erro_repositorio(self):
+        self.mock_repositorio.excluir_por_nome.return_value = False
+        resultado = self.servico.excluir_por_nome("nome")
+        self.mock_repositorio.excluir_por_nome.assert_called_once_with("nome")
+        self.assertEqual(resultado, "Impossivel excluir\n"
+                       "Erro Interno!")

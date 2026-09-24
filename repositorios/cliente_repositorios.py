@@ -58,7 +58,7 @@ class ClienteRepositorio:
             conexao = criar_conexao()
             cursor = conexao.cursor()
 
-            sql = """SELECT ID, nome, cpf, telefone, email FROM cliente"""
+            sql = """SELECT * FROM cliente"""
 
             cursor.execute(sql)
             clientes = cursor.fetchall()

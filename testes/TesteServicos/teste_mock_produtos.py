@@ -156,16 +156,6 @@ class TestProdutoServico(unittest.TestCase):
                        "Erro Interno!")
 
 
-
-
-
-
-
-
-
-
-
-
 if __name__ == "__main__":
     unittest.main()
 

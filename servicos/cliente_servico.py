@@ -34,7 +34,7 @@ class ClienteServico:
     def buscar_por_nome(self, nome):
         nome_tratado = nome.strip()
         if nome_tratado:
-            busca = self.repositorio.buscar_por_nome(nome)
+            busca = self.repositorio.buscar_por_nome(nome_tratado)
             if not busca:
                 msg = "Não foram encontrados registros com esse nome"
             else:

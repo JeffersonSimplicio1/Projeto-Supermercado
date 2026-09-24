@@ -154,3 +154,7 @@ class TestClienteServico(unittest.TestCase):
         self.mock_repositorio.excluir_por_nome.assert_called_once_with("nome")
         self.assertEqual(resultado, "Impossivel excluir\n"
                        "Erro Interno!")
+
+
+if __name__ == "__main__":
+    unittest.main()

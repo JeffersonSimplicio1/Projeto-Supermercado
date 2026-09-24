@@ -2,3 +2,9 @@ venv/
 __pycache__/
 *.pyc
 .env
+# Ambientes e arquivos locais
+venv/
+.idea/
+__pycache__/
+*.pyc
+.env

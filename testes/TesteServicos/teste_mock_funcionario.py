@@ -93,5 +93,50 @@ class TestFuncionarioServico(unittest.TestCase):
         self.mock_repositorio.buscar_por_nome.assert_called_once_with("Nome")
         self.assertEqual(resultado,"Não há funcionário cadastrado com este nome!")
 
+    def test_atualizar_funcionarios_sucesso(self):
+        funcionario = Funcionario("Jefferson", "Gerente", 5000)
+        self.mock_repositorio.buscar_por_id.return_value = 3
+        self.mock_repositorio.atualziar.return_value = funcionario
+        resultado = self.servico.atualizar(3, funcionario)
+        self.mock_repositorio.buscar_por_id.assert_called_once_with(3)
+        self.mock_repositorio.atualizar.assert_called_once_with(3, funcionario)
+        self.assertEqual(resultado, "Informações do funcionário atualizadas com sucesso!")
+
+    def test_atualizar_funcionarios_erro_salario_abaixo_do_minimo(self):
+        funcionario = Funcionario("Gabriel", "Caixa", 200)
+        self.mock_repositorio.buscar_por_id.return_value = 3
+        resultado = self.servico.atualizar(3,funcionario)
+        self.mock_repositorio.buscar_por_id.assert_called_once_with(3)
+        self.mock_repositorio.atualizar.assert_not_called()
+        self.assertEqual(resultado, ("Informações de salário incorretas\n"
+                           "- O valor salarial esta abaixo do salário minimo!"))
+
+    def test_atualizar_funcionarios_erro_nome_em_branco(self):
+        funcionario = Funcionario("  ", "Estoque",1800 )
+        self.mock_repositorio.buscar_por_id.return_value = 3
+        resultado = self.servico.atualizar(3,funcionario)
+        self.mock_repositorio.atualizar.assert_not_called()
+        self.assertEqual(resultado, "Dados do funcionário incompleto(s)\n"
+                   "Revise as informações e tente novamente!!!")
+
+    def test_atualizar_funcionarios_erro_cargo_em_branco(self):
+        funcionario = Funcionario("Matheus", " ",1800 )
+        self.mock_repositorio.buscar_por_id.return_value = 3
+        resultado = self.servico.atualizar(3,funcionario)
+        self.mock_repositorio.atualizar.assert_not_called()
+        self.assertEqual(resultado, "Dados do funcionário incompleto(s)\n"
+                   "Revise as informações e tente novamente!!!")
+
+    def test_atualizar_funcionarios_erro_repositorio(self):
+        funcionario = Funcionario("Gabriel", "Caixa", 2000)
+        self.mock_repositorio.buscar_por_id.return_value = 3
+        self.mock_repositorio.atualizar.return_value = False
+        resultado = self.servico.atualizar(3,funcionario)
+        self.mock_repositorio. buscar_por_id.assert_called_once_with(3)
+        self.mock_repositorio.atualizar.assert_called_once_with(3,funcionario)
+        self.assertEqual(resultado, "Impossível atualizar no momento!\n"
+                               "- Erro no servidor!")
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -2,10 +2,12 @@ from database.coneccao import criar_conexao
 
 class ProdutoRepositorio:
     def cadastrar(self, produto):
-        conexao = criar_conexao()
-        cursor = conexao.cursor()
-
+        conexao = None
+        cursor = None
         try:
+            conexao = criar_conexao()
+            cursor = conexao.cursor()
+
             sql = """
                 INSERT INTO produto (categoria, nome, preco, qtd_estoque)
                 VALUES (%s,%s,%s,%s)
@@ -25,8 +27,10 @@ class ProdutoRepositorio:
             return produto_id
 
         finally:
-            cursor.close()
-            conexao.close()
+            if cursor:
+                cursor.close()
+            if conexao:
+                conexao.close()
 
     def listar_todos(self):
         try:
